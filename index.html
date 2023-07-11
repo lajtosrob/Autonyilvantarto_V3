@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autó márka táblázat</title>
+    <style>
+        .body2 {
+            border: 1px solid black;
+        }
+
+        .tabla tr,
+        th,
+        td {
+            border: 1px solid black;
+            width: 167px;
+        }
+
+        body {
+            background-color: teal;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 1./ 3 nyomogomb-->
+    <button onclick="feltoltes()">Feltöltés</button>
+    <button onclick="urites()">Összes elem törlése</button>
+    <br>
+    <br>
+
+    <div>
+        <form action="">
+            <label for="carId"></label>
+            <input type="text" name="" id="carId" disabled>
+            <label for="carType"></label>
+            <input type="text" name="" id="carType">
+            <label for="carYear"></label>
+            <input type="text" name="" id="carYear" maxlength="4" size="4">
+            <label for="carDelId">Törlendő autó id-ja.</label>
+            <input type="text" name="" id="carDelId" maxlength="4" size="4">
+            <button type="button" onclick="torles()">Kiválasztott elem törlése</button>
+        </form>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Márka</td>
+                <th>Évjárat</th>
+            </tr>
+        </thead>
+        <tbody id="torzs"></tbody>
+    </table>
+
+    <script>
+        newList = [];
+        var deleteById;
+        //document.getElementById("torzs").innerHTML = "";
+        var dataList = [];
+        var itemList = {};
+        var id = 1;
+
+        function feltoltes() {
+            itemList = {
+                id: id,
+                carType: document.getElementById("carType").value,
+                carYear: document.getElementById("carYear").value
+            }
+            if (itemList.carType == "" || isNaN(parseInt(itemList.carYear))) {
+                alert("Hibás, hiányos adatot adott meg!");
+                return;
+            }
+            else {
+                dataList.push(itemList);
+                id++;
+                document.getElementById("torzs").innerHTML += "<tr><td>" + itemList.id + "</td><td>"
+                    + document.getElementById("carType").value + "</td><td>" + document.getElementById("carYear").value + "</td></tr>";
+                document.getElementById("carType").value = "";
+                document.getElementById("carYear").value = "";
+            }
+        }
+
+        function urites() {
+            document.getElementById("torzs").innerHTML = "";
+            dataList = [];
+            id = 1;
+        }
+
+        function torles() {
+            newList = [];
+            var index = 0;
+            deleteById = document.getElementById("carDelId").value;
+            if (isNaN(parseInt(deleteById)) || parseInt(deleteById) > dataList.length || deleteById == 0) {
+                alert('Hibás adatot adott meg!');
+                document.getElementById("carDelId").value = "";
+                return;
+            }
+            else {
+                for (index = 0; index < dataList.length; index++) {
+                    if (dataList[index].id != deleteById) {
+                        newList.push(dataList[index]);
+                    }
+                }
+                dataList = newList;
+                kiir();
+            }
+        }
+
+        function kiir() {
+            document.getElementById("torzs").innerHTML = "";
+            for (var index = 0; index < newList.length; index++) {
+                document.getElementById("torzs").innerHTML += "<tr><td>" + newList[index].id + "</td><td>"
+                    + newList[index].carType + "</td><td>" + newList[index].carYear + "</td></tr>";
+            }
+        }
+    </script>
+</body>
+
+</html>
